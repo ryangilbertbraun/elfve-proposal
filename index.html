@@ -3555,6 +3555,12 @@
         }
 
         document.addEventListener("keydown", function (e) {
+          // ignore shortcuts while the password gate is up, or while typing in a field
+          var gateUp = document.getElementById("gate") && !document.getElementById("gate").classList.contains("unlocked");
+          var t = e.target;
+          var typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable);
+          if (gateUp || typing) return;
+
           if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") { e.preventDefault(); transitionTo(currentSlide + 1); }
           else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); transitionTo(currentSlide - 1); }
           else if (e.key === "f" || e.key === "F") {
