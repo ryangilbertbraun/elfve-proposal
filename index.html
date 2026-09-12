@@ -591,7 +591,7 @@
       /* ===== Platform-risk slide: three risk cards with severity tiers ===== */
       .risk-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 18px;
         align-items: stretch;
       }
@@ -644,33 +644,40 @@
 
       /* "owning it instead" — tight benefit/risk chips, no prose */
       .own-trade {
-        margin-top: 18px;
+        /* the stay-vs-move takeaway is the focus: give it a prominent card */
+        margin-top: 22px;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 22px;
         flex-wrap: wrap;
+        background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(16,185,129,0.05));
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--blue);
+        border-radius: 16px;
+        padding: 20px 24px;
       }
       .own-trade-title {
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--fg-dim);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--fg);
         flex-shrink: 0;
+        letter-spacing: -0.01em;
       }
-      .own-trade-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+      .own-trade-chips { display: flex; gap: 12px; flex-wrap: wrap; flex: 1; }
       .trade-chip {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        font-size: 12px;
+        gap: 9px;
+        font-size: 13.5px;
+        font-weight: 500;
         color: var(--fg);
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: 999px;
-        padding: 6px 13px 6px 10px;
+        padding: 9px 17px 9px 13px;
       }
-      .trade-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+      .trade-chip svg { width: 16px; height: 16px; flex-shrink: 0; }
       .trade-chip--up   { border-color: rgba(16, 185, 129, 0.35); }
       .trade-chip--down { border-color: rgba(245, 158, 11, 0.35); }
 
@@ -2639,7 +2646,7 @@
       <div style="margin-bottom: 26px; position: relative; z-index: 1;">
         <p class="eyebrow" style="color: var(--amber);">The Platform Decision · Risk</p>
         <h2 style="font-size: 32px;">Beyond the numbers</h2>
-        <p class="lead" style="max-width: 62ch;">The real question is whether Base44 can carry a product you sell, and it wasn't built to. Three risks a price tag can't show:</p>
+        <p class="lead" style="max-width: 62ch;">The real question is whether Base44 can carry a product you sell, and it wasn't built to. Four risks a price tag can't show:</p>
       </div>
 
       <div class="risk-grid" style="position: relative; z-index: 1;">
@@ -2671,6 +2678,16 @@
           <span class="risk-tier tier-structural">Structural</span>
           <p class="risk-title">The roadmap stalls</p>
           <p class="risk-body">No one owns the code, so features stop shipping and the product can't grow.</p>
+        </div>
+
+        <!-- RISK 4: long-term confidence -->
+        <div class="risk-card">
+          <div class="risk-hero">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="#60a5fa" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12l1.7 1.7L15 10.5" stroke="#60a5fa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="risk-tier tier-high">Long-term</span>
+          <p class="risk-title">No lasting confidence</p>
+          <p class="risk-body">A rented platform you can't fully control is hard to stand behind, or sell to clients, for the long run.</p>
         </div>
       </div>
 
@@ -2752,8 +2769,8 @@
             <span class="fork-badge" style="color:var(--green); border-color:rgba(16,185,129,0.5); background:rgba(16,185,129,0.12);">B</span>
             <div class="fork-lane-body">
               <div class="fork-lane-head">
-                <p class="fork-name">Build toward product, month by month</p>
-                <p class="fork-cadence">Pathway · monthly, goal-gated</p>
+                <p class="fork-name">Build as you go</p>
+                <p class="fork-cadence">Build as you go · monthly, goal-gated</p>
               </div>
               <p class="fork-desc">Milestones that lead, step by step, to a launched SaaS product. Fund it as you go.</p>
             </div>
@@ -2771,8 +2788,8 @@
             <span class="fork-badge" style="color:var(--accent); border-color:rgba(232,93,58,0.5); background:rgba(232,93,58,0.12);">C</span>
             <div class="fork-lane-body">
               <div class="fork-lane-head">
-                <p class="fork-name">Build the SaaS product now</p>
-                <p class="fork-cadence">All-In · committed project</p>
+                <p class="fork-name">Rapid Development</p>
+                <p class="fork-cadence">Rapid Development · committed project</p>
               </div>
               <p class="fork-desc">Commit to the full build up front as a focused project. Fastest route to a sellable product.</p>
             </div>
@@ -3041,7 +3058,7 @@
       <div class="bg-glow" style="width: 300px; height: 300px; background: var(--green); top: -80px; right: -70px; opacity: 0.1;"></div>
 
       <div style="margin-bottom: 30px; position: relative; z-index: 1;">
-        <p class="eyebrow" style="color: var(--green);">Runway B · The Pathway to Product</p>
+        <p class="eyebrow" style="color: var(--green);">Runway B · Build As You Go</p>
         <h2 style="font-size: 30px;">A monthly fee, with goals that lead to launch</h2>
         <p class="lead">The middle path: a predictable monthly engagement where each stretch has a clear goal. You fund it as you go and see real progress at every gate, and the destination is a launched SaaS product.</p>
       </div>
@@ -3093,9 +3110,9 @@
       <div class="bg-glow" style="width: 340px; height: 340px; background: var(--accent); bottom: -100px; right: -80px; opacity: 0.12;"></div>
 
       <div style="margin-bottom: 22px; position: relative; z-index: 1;">
-        <p class="eyebrow">Runway C · Go All-In Now</p>
+        <p class="eyebrow">Runway C · Rapid Development</p>
         <h2 style="font-size: 30px;">Commit to the build, get to market fast</h2>
-        <p class="lead">Same destination as the pathway: a SaaS product other HR firms can buy. This time it's built as one focused, committed project instead of spread over monthly gates. How far you take it is a scope decision, shown below.</p>
+        <p class="lead">Same destination as Build As You Go: a SaaS product other HR firms can buy. This time it's built as one focused, committed project instead of spread over monthly gates. How far you take it is a scope decision, shown below.</p>
       </div>
 
       <!-- selectable scope cards; the detail panel below updates on click -->
@@ -3144,7 +3161,7 @@
       <div class="bg-glow" style="width: 240px; height: 240px; background: var(--blue); bottom: -80px; left: -80px; opacity: 0.08;"></div>
 
       <div style="margin-bottom: 14px; position: relative; z-index: 1;">
-        <p class="eyebrow">Why Going All-In Pays Off</p>
+        <p class="eyebrow">Why Rapid Development Pays Off</p>
         <h2 style="font-size: 30px;">Same data. Three levels of product.</h2>
         <p class="lead" style="max-width: 70ch;">The same leave case, shown three ways. Press a level to see the experience change, from a plain list, to an AI-assisted workflow, to a polished product an HR firm pays to use.</p>
       </div>
@@ -3374,7 +3391,7 @@
         </div>
         <!-- B -->
         <div class="card" style="padding: 22px 20px; border-top: 3px solid var(--green); display:flex; flex-direction:column; gap:12px; background: linear-gradient(180deg, rgba(16,185,129,0.05), var(--surface));">
-          <div><p style="font-size:16px; font-weight:700; color:var(--green);">B · Pathway</p><p style="font-size:11.5px; color:var(--fg-dim); margin-top:2px;">an ongoing partnership</p></div>
+          <div><p style="font-size:16px; font-weight:700; color:var(--green);">B · Build as you go</p><p style="font-size:11.5px; color:var(--fg-dim); margin-top:2px;">an ongoing partnership</p></div>
           <div style="display:flex; flex-direction:column; gap:8px;">
             <p style="font-size:12.5px; color:var(--fg-muted); line-height:1.5;"><strong style="color:var(--fg);">Shape:</strong> a standing monthly team, like a fractional dev shop.</p>
             <p style="font-size:12.5px; color:var(--fg-muted); line-height:1.5;"><strong style="color:var(--fg);">Contact:</strong> weekly demos, a monthly gate where you re-prioritize.</p>
@@ -3384,7 +3401,7 @@
         </div>
         <!-- C -->
         <div class="card" style="padding: 22px 20px; border-top: 3px solid var(--accent); display:flex; flex-direction:column; gap:12px;">
-          <div><p style="font-size:16px; font-weight:700; color:var(--accent);">C · All-In</p><p style="font-size:11.5px; color:var(--fg-dim); margin-top:2px;">a committed build partnership</p></div>
+          <div><p style="font-size:16px; font-weight:700; color:var(--accent);">C · Rapid Development</p><p style="font-size:11.5px; color:var(--fg-dim); margin-top:2px;">a committed build partnership</p></div>
           <div style="display:flex; flex-direction:column; gap:8px;">
             <p style="font-size:12.5px; color:var(--fg-muted); line-height:1.5;"><strong style="color:var(--fg);">Shape:</strong> a focused project with a shared launch goal &amp; date.</p>
             <p style="font-size:12.5px; color:var(--fg-muted); line-height:1.5;"><strong style="color:var(--fg);">Contact:</strong> weekly demos, milestone reviews, launch planning.</p>
