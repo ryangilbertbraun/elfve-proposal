@@ -3932,12 +3932,17 @@
             ctx.font = "700 12px 'Space Grotesk', sans-serif";
             ctx.textBaseline = "middle";
             ctx.textAlign = "left";
+            var cw = chart.width;   // full canvas width, for clamping
             endpoints.forEach(function (ep) {
-              var x = xA.getPixelForValue(last) + 8;
+              var dotX = xA.getPixelForValue(last);
+              var x = dotX + 8;
               var yy = Math.max(yA.top + 8, Math.min(yA.bottom - 8, ep.y));
+              // keep the whole label inside the canvas (never let it clip on the right)
+              var w = ctx.measureText(ep.text).width;
+              if (x + w > cw - 4) x = cw - 4 - w;
               // little dot on the line end
               ctx.fillStyle = ep.color;
-              ctx.beginPath(); ctx.arc(xA.getPixelForValue(last), ep.y, 3.5, 0, Math.PI * 2); ctx.fill();
+              ctx.beginPath(); ctx.arc(dotX, ep.y, 3.5, 0, Math.PI * 2); ctx.fill();
               ctx.fillStyle = ep.color;
               ctx.fillText(ep.text, x, yy);
             });
@@ -3962,7 +3967,7 @@
             responsive: true,
             maintainAspectRatio: false,
             animation: { duration: 250 },
-            layout: { padding: { right: 84, top: 10, bottom: 4 } }, // room for end-of-line labels
+            layout: { padding: { right: 122, top: 10, bottom: 4 } }, // room for end-of-line labels
             interaction: { mode: "index", intersect: false },
             onHover: function (e, els) {
               var idx = els && els.length ? els[0].index : null;
