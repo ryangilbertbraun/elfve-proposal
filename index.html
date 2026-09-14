@@ -165,6 +165,9 @@
         break-after: page;
       }
 
+      /* slides flagged hidden are excluded from the deck (source kept for later) */
+      .slide-hidden { display: none !important; }
+
       .slide-num {
         position: absolute;
         top: 38px;
@@ -1111,6 +1114,130 @@
       }
       @media screen and (min-width: 2560px) {
         .slide { zoom: 1.3; height: calc(100vh / 1.3); min-height: calc(100vh / 1.3); }
+      }
+
+      /* ===== Mobile on-screen nav (hidden on desktop) ===== */
+      .mnav { display: none; }
+      .mnav-btn {
+        width: 42px; height: 42px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--surface); border: 1px solid var(--border-strong);
+        color: var(--fg); cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      }
+      .mnav-btn svg { width: 20px; height: 20px; }
+      .mnav-btn:active { transform: scale(0.94); }
+      .mnav-count {
+        font-family: var(--font-mono); font-size: 12px; color: var(--fg-muted);
+        min-width: 54px; text-align: center;
+      }
+
+      /* ============================================================
+         MOBILE (≤768px). Everything is inside this query, so the
+         desktop layout is provably unchanged.
+         ============================================================ */
+      @media screen and (max-width: 768px) {
+        html, body { overflow-x: hidden; overflow-y: auto; height: auto; -webkit-text-size-adjust: 100%; }
+        body { font-size: 15px; }
+
+        /* active slide (JS sets display:flex inline) becomes a scrollable, auto-height panel */
+        .slide {
+          height: auto !important;
+          min-height: 100vh;
+          padding: 68px 20px 96px;   /* room for the top slide-num + bottom nav bar */
+          justify-content: flex-start;
+          overflow-x: clip;          /* contain decorative glows */
+          overflow-y: visible !important;
+          zoom: 1 !important;
+        }
+        .slide-num { top: 16px; right: 18px; font-size: 11px; }
+
+        /* typography scales down */
+        h1 { font-size: clamp(30px, 9vw, 40px); margin-bottom: 16px; }
+        h2 { font-size: clamp(23px, 6.5vw, 30px) !important; }
+        h3 { font-size: 18px; }
+        .subtitle { font-size: 16px; max-width: none !important; }
+        .lead { font-size: 14.5px; max-width: none !important; }
+        .eyebrow { font-size: 11px; margin-bottom: 10px; }
+
+        /* show the on-screen nav, fixed at the bottom */
+        .mnav {
+          display: flex; align-items: center; gap: 16px;
+          position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+          z-index: 1000;
+          background: rgba(26,26,46,0.82); backdrop-filter: blur(8px);
+          border: 1px solid var(--border); border-radius: 999px;
+          padding: 6px 10px;
+        }
+        #fs-hint { display: none !important; }
+
+        /* ---- collapse every known multi-column layout to a single column ---- */
+        .path-grid,
+        .pd-grid,
+        .risk-grid,
+        .rc-cards,
+        .elv-cols,
+        .elv-meta { grid-template-columns: 1fr !important; }
+        .pd-grid { gap: 22px !important; }
+        .risk-grid { gap: 12px !important; }
+
+        /* inline-style grids (need !important to beat inline styles) */
+        .donut-wrap { grid-template-columns: 1fr !important; gap: 26px !important; }
+        .slide [style*="grid-template-columns: repeat(3, 1fr)"],
+        .slide [style*="grid-template-columns: repeat(4, 1fr)"],
+        .slide [style*="grid-template-columns:repeat(3,1fr)"],
+        .slide [style*="grid-template-columns:repeat(4,1fr)"],
+        .slide [style*="grid-template-columns: repeat(2, 1fr)"],
+        .slide [style*="grid-template-columns:repeat(2,1fr)"],
+        .slide [style*="grid-template-columns: 1.3fr 1fr"],
+        .slide [style*="grid-template-columns: 1fr auto 1.5fr"],
+        .slide [style*="grid-template-columns: 0.82fr auto 1.18fr"] {
+          grid-template-columns: 1fr !important;
+        }
+
+        /* two-column flex splits that hold big content → stack */
+        .pd-left, .pd-right { width: 100% !important; }
+
+        /* ---- Title slide: hide the orbital hero decoration ---- */
+        .orbit-scene, .title-hero { display: none !important; }
+        .gate-title { font-size: 28px; }
+        .gate-form { flex-direction: column; }
+        .gate-form button { width: 100%; }
+
+        /* ---- Slide 2: stack the case → dev-team split and fix the progress strip ---- */
+        .s2-main { flex-direction: column !important; gap: 16px !important; }
+        .s2-main > div { flex: none !important; width: 100% !important; }
+        .s2-arrow { transform: rotate(90deg); margin: 2px 0; }
+        .s2-main .card { height: auto !important; }
+        .s2-progress { flex-direction: column !important; height: auto !important; gap: 10px !important; }
+        .s2-progress > div { width: 100% !important; flex: none !important; padding: 12px 16px !important; }
+        .s2-progress-gap { display: none !important; }
+
+        /* ---- Cost slide: chart + dials ---- */
+        .pd-chart-panel { height: 240px !important; margin-right: 0 !important; }
+        .pd-dials { flex-wrap: wrap !important; gap: 14px !important; }
+
+        /* ---- Fork slide: stack the origin + lanes ---- */
+        .fork-flow { flex-direction: column !important; align-items: stretch !important; }
+        .fork-origin { width: 100% !important; margin-bottom: 6px; }
+        .fork-fan { display: none !important; }
+        .fork-lanes { padding-left: 0 !important; }
+        .fork-lane { flex-wrap: wrap; }
+        .fork-rate { width: 100% !important; border-left: none !important; border-right: none !important;
+          border-top: 1px solid var(--border); padding: 8px 0 0 !important; margin-top: 4px; }
+        .fork-track { display: none !important; }
+        .fork-dest { width: 100% !important; }
+
+        /* ---- Interactive browser/app mockups: scale the whole unit to fit ---- */
+        .mk, .mk-hr, .elv { font-size: 90%; }
+        .ba-monitor { max-width: 100% !important; padding: 10px 10px 12px !important; }
+        .ba-stage { height: 260px !important; }
+        .ba-switch { flex-wrap: wrap !important; gap: 6px !important; }
+        .ba-tab { font-size: 12px !important; padding: 7px 12px !important; }
+
+        /* keep decorative glows from causing horizontal scroll */
+        .bg-glow { max-width: 60vw; }
+        .callout { padding: 14px 16px; }
       }
 
       @media print {
@@ -2074,6 +2201,7 @@
 
       <!-- Hero: watercolor brain in orbital rings -->
       <div
+        class="title-hero"
         style="
           position: absolute;
           right: 130px;
@@ -2294,7 +2422,7 @@
         <p class="lead">The rules engine, the workflows, the AI drafting: the difficult work is built on Base44. Here's how the product handles a single leave case. It works today, but still needs hardening before LFV can rely on it for internal use.</p>
       </div>
 
-      <div style="display: flex; align-items: stretch; gap: 22px; position: relative; z-index: 1;">
+      <div class="s2-main" style="display: flex; align-items: stretch; gap: 22px; position: relative; z-index: 1;">
         <!-- LEFT: one connected live case -->
         <div style="flex: 1.55;">
           <div class="elf-panel" style="padding: 20px 22px;">
@@ -2340,7 +2468,7 @@
         </div>
 
         <!-- ARROW -->
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0;">
+        <div class="s2-arrow" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0;">
           <svg width="46" height="18" viewBox="0 0 46 18" fill="none"><path d="M0 9h34" stroke="rgba(168,85,247,0.5)" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M30 3l8 6-8 6" stroke="#a855f7" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
           <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--fg-dim); text-transform: uppercase;">We take<br/>it from here</span>
         </div>
@@ -2372,13 +2500,13 @@
         </div>
         <!-- proportions mirror the row above (case 1.55 · arrow gap · dev team 1)
              so the Built / Left-to-do break lines up under the Mindful card -->
-        <div style="display:flex; align-items:stretch; gap: 22px; height: 40px;">
+        <div class="s2-progress" style="display:flex; align-items:stretch; gap: 22px; height: 40px;">
           <div style="flex: 1.55; border-radius: 10px; border: 1px solid var(--border); background: linear-gradient(90deg, rgba(16,185,129,0.28), rgba(96,165,250,0.22)); display:flex; align-items:center; padding-left:16px; gap:9px;">
             <span style="width:8px; height:8px; border-radius:50%; background:#10b981; display:inline-block;"></span>
             <span style="font-size: 12.5px; font-weight: 600; color: var(--fg);">Built &amp; proven</span>
             <span style="font-size: 11px; color: var(--fg-muted);">rules engine, modules, AI drafting</span>
           </div>
-          <div style="width: 90px; flex-shrink: 0;"></div>
+          <div class="s2-progress-gap" style="width: 90px; flex-shrink: 0;"></div>
           <div style="flex: 1; border-radius: 10px; border: 1px solid rgba(245,158,11,0.35); background: rgba(245,158,11,0.14); display:flex; align-items:center; padding-left:16px; gap:9px;">
             <span style="width:8px; height:8px; border-radius:50%; background:#f59e0b; display:inline-block;"></span>
             <span style="font-size: 12.5px; font-weight: 600; color: var(--fg);">Left to do</span>
@@ -3416,8 +3544,8 @@
       </div>
     </div>
 
-    <!-- ══════════ SLIDE — REFERRAL ══════════ -->
-    <div class="slide" style="justify-content: center; position: relative">
+    <!-- ══════════ SLIDE — REFERRAL (hidden for client presentation; source kept) ══════════ -->
+    <div class="slide slide-hidden" style="justify-content: center; position: relative">
       <span class="slide-num">11</span>
       <!-- INTERNAL NOTE: hide this slide for the client presentation -->
       <div class="no-print" style="position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:20; display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#f0913f; background:rgba(240,145,63,0.14); border:1px solid rgba(240,145,63,0.45); border-radius:999px; padding:6px 14px;">
@@ -3514,10 +3642,22 @@
       Press <strong style="color: var(--fg);">F</strong> for fullscreen &middot; <strong style="color: var(--fg);">&larr; &rarr;</strong> to navigate
     </div>
 
+    <!-- mobile-only on-screen navigation (hidden on desktop via CSS) -->
+    <div id="mnav" class="mnav no-print" aria-hidden="true">
+      <button id="mnavPrev" class="mnav-btn" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span id="mnavCount" class="mnav-count">1 / 12</span>
+      <button id="mnavNext" class="mnav-btn" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
     <script>
       (function () {
         if (window.location.search.includes("print")) return;
-        const slides = document.querySelectorAll(".slide");
+        // .slide-hidden slides are excluded from the deck (kept in source, not shown)
+        const slides = document.querySelectorAll(".slide:not(.slide-hidden)");
         let currentSlide = 0;
         let isAnimating = false;
 
@@ -3592,6 +3732,41 @@
         });
 
         setTimeout(() => { const hint = document.getElementById("fs-hint"); if (hint) { hint.style.transition = "opacity 1s"; hint.style.opacity = "0"; } }, 5000);
+
+        // ===== Mobile navigation: on-screen buttons + swipe =====
+        var mPrev = document.getElementById("mnavPrev");
+        var mNext = document.getElementById("mnavNext");
+        var mCount = document.getElementById("mnavCount");
+
+        function updateCount() {
+          if (mCount) mCount.textContent = (currentSlide + 1) + " / " + slides.length;
+        }
+        updateCount();
+        var _origTransition = transitionTo;
+        transitionTo = function (n) { _origTransition(n); setTimeout(updateCount, 400); };
+
+        if (mPrev) mPrev.addEventListener("click", function () { transitionTo(currentSlide - 1); });
+        if (mNext) mNext.addEventListener("click", function () { transitionTo(currentSlide + 1); });
+
+        // horizontal swipe (ignored when the gesture is mostly vertical, so tall slides scroll)
+        var tsx = 0, tsy = 0, tracking = false;
+        document.addEventListener("touchstart", function (e) {
+          if (!e.touches || e.touches.length !== 1) { tracking = false; return; }
+          var gateUp = document.getElementById("gate") && !document.getElementById("gate").classList.contains("unlocked");
+          if (gateUp) { tracking = false; return; }
+          tsx = e.touches[0].clientX; tsy = e.touches[0].clientY; tracking = true;
+        }, { passive: true });
+        document.addEventListener("touchend", function (e) {
+          if (!tracking) return;
+          tracking = false;
+          var t = e.changedTouches && e.changedTouches[0];
+          if (!t) return;
+          var dx = t.clientX - tsx, dy = t.clientY - tsy;
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+            if (dx < 0) transitionTo(currentSlide + 1);
+            else transitionTo(currentSlide - 1);
+          }
+        }, { passive: true });
       })();
     </script>
 
@@ -3919,9 +4094,10 @@
             // both lines are identifiable at a glance without hovering.
             var ds = chart.data.datasets;
             var last = MONTHS;
+            var mob = window.innerWidth <= 768;   // shorter labels on mobile
             var endpoints = [
-              { text: "Base44 " + money(ds[0].data[last]), color: ACCENT, y: yA.getPixelForValue(ds[0].data[last]) },
-              { text: "Own it " + money(ds[1].data[last]), color: BLUE, y: yA.getPixelForValue(ds[1].data[last]) },
+              { text: (mob ? "" : "Base44 ") + money(ds[0].data[last]), color: ACCENT, y: yA.getPixelForValue(ds[0].data[last]) },
+              { text: (mob ? "" : "Own it ") + money(ds[1].data[last]), color: BLUE, y: yA.getPixelForValue(ds[1].data[last]) },
             ];
             // nudge labels apart if they'd collide
             if (Math.abs(endpoints[0].y - endpoints[1].y) < 16) {
@@ -3967,7 +4143,7 @@
             responsive: true,
             maintainAspectRatio: false,
             animation: { duration: 250 },
-            layout: { padding: { right: 122, top: 10, bottom: 4 } }, // room for end-of-line labels
+            layout: { padding: { right: (window.innerWidth <= 768 ? 54 : 122), top: 10, bottom: 4 } }, // room for end-of-line labels (less on mobile)
             interaction: { mode: "index", intersect: false },
             onHover: function (e, els) {
               var idx = els && els.length ? els[0].index : null;
