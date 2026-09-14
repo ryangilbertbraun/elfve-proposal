@@ -1807,6 +1807,40 @@
         flex-shrink: 0;
         min-width: 24px;
       }
+      /* clickable agenda items: jump to the matching slide */
+      .agenda-list li[data-agenda-goto] {
+        cursor: pointer;
+        transition:
+          color 0.18s ease,
+          padding-left 0.18s ease,
+          border-color 0.18s ease;
+        outline: none;
+      }
+      /* trailing arrow that fades in on hover/focus to signal "go" */
+      .agenda-list li[data-agenda-goto]::after {
+        content: "→";
+        margin-left: auto;
+        padding-left: 12px;
+        font-family: var(--font-mono);
+        font-size: 15px;
+        color: var(--purple);
+        opacity: 0;
+        transform: translateX(-6px);
+        transition:
+          opacity 0.18s ease,
+          transform 0.18s ease;
+      }
+      .agenda-list li[data-agenda-goto]:hover,
+      .agenda-list li[data-agenda-goto]:focus-visible {
+        color: var(--purple);
+        padding-left: 6px;
+        border-color: var(--purple);
+      }
+      .agenda-list li[data-agenda-goto]:hover::after,
+      .agenda-list li[data-agenda-goto]:focus-visible::after {
+        opacity: 1;
+        transform: translateX(0);
+      }
 
       /* ===== Mobile on-screen nav (hidden on desktop) ===== */
       .mnav {
@@ -4956,17 +4990,17 @@
       </div>
 
       <ol class="agenda-list" style="position: relative; z-index: 1">
-        <li>You've built the hard part already</li>
-        <li>A code review found 33 issues</li>
-        <li>What each path costs to run</li>
-        <li>Beyond the numbers, the platform risk</li>
-        <li>Three ways to move forward</li>
-        <li>Runway A, repair it for internal use</li>
-        <li>Runway B, build as you go</li>
-        <li>Runway C, rapid development</li>
-        <li>Same data, three levels of product</li>
-        <li>The relationship, for each option</li>
-        <li>Next steps</li>
+        <li data-agenda-goto="2">You've built the hard part already</li>
+        <li data-agenda-goto="3">A code review found 33 issues</li>
+        <li data-agenda-goto="4">Beyond the numbers, the platform risk</li>
+        <li data-agenda-goto="5">Three ways to move forward</li>
+        <li data-agenda-goto="6">Runway A, repair it for internal use</li>
+        <li data-agenda-goto="7">Runway B, build as you go</li>
+        <li data-agenda-goto="8">Runway C, rapid development</li>
+        <li data-agenda-goto="9">What each path costs to run</li>
+        <li data-agenda-goto="10">Same data, three levels of product</li>
+        <li data-agenda-goto="11">The relationship, for each option</li>
+        <li data-agenda-goto="12">Next steps</li>
       </ol>
     </div>
 
@@ -9326,6 +9360,23 @@
           } else {
             slide.style.display = "none";
           }
+        });
+
+        // Agenda: click an item to jump straight to that slide.
+        document.querySelectorAll("[data-agenda-goto]").forEach(function (li) {
+          li.setAttribute("role", "link");
+          li.setAttribute("tabindex", "0");
+          function go() {
+            var idx = parseInt(li.getAttribute("data-agenda-goto"), 10);
+            if (!isNaN(idx)) transitionTo(idx);
+          }
+          li.addEventListener("click", go);
+          li.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              go();
+            }
+          });
         });
 
         function animateIn(slide) {
