@@ -1742,36 +1742,38 @@
       /* subtle export-to-PDF button in the title slide's bottom corner */
       .export-btn {
         position: absolute;
-        bottom: 30px;
-        left: 40px;
+        bottom: 40px;
+        left: 76px; /* line up with the content column's left edge (.slide padding) */
         z-index: 6;
         display: inline-flex;
         align-items: center;
-        gap: 7px;
+        gap: 8px;
         font-family: var(--font-mono);
-        font-size: 10px;
+        font-size: 10.5px;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--fg-dim);
-        background: transparent;
-        border: 1px solid var(--border);
+        color: var(--fg-muted);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-strong);
         border-radius: 999px;
-        padding: 7px 13px;
+        padding: 8px 15px;
         cursor: pointer;
-        opacity: 0.4;
+        opacity: 0.7;
         transition:
           opacity 0.25s ease,
           color 0.25s ease,
+          background 0.25s ease,
           border-color 0.25s ease;
       }
       .export-btn svg {
-        width: 13px;
-        height: 13px;
+        width: 14px;
+        height: 14px;
       }
       .export-btn:hover {
         opacity: 1;
         color: var(--fg);
-        border-color: var(--border-strong);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--fg-dim);
       }
 
       /* ===== Agenda slide: simple numbered list, one line per slide ===== */
