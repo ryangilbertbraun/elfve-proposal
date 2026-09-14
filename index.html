@@ -1613,6 +1613,41 @@
         }
       }
 
+      /* subtle export-to-PDF button in the title slide's bottom corner */
+      .export-btn {
+        position: absolute;
+        bottom: 30px;
+        left: 40px;
+        z-index: 6;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--fg-dim);
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 7px 13px;
+        cursor: pointer;
+        opacity: 0.4;
+        transition:
+          opacity 0.25s ease,
+          color 0.25s ease,
+          border-color 0.25s ease;
+      }
+      .export-btn svg {
+        width: 13px;
+        height: 13px;
+      }
+      .export-btn:hover {
+        opacity: 1;
+        color: var(--fg);
+        border-color: var(--border-strong);
+      }
+
       /* ===== Agenda slide: simple numbered list, one line per slide ===== */
       .agenda-list {
         list-style: none;
@@ -1915,12 +1950,24 @@
       }
 
       @media print {
+        /* force browsers to keep every background/color instead of dropping to white */
+        *,
+        *::before,
+        *::after {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+        }
+        html,
         body {
-          background: #1a1a2e;
+          background: #1a1a2e !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
           overflow: visible;
           height: auto;
+        }
+        .slide {
+          background: #1a1a2e !important;
         }
         .slide {
           zoom: 1 !important;
@@ -1934,6 +1981,16 @@
           overflow: hidden;
           opacity: 1 !important;
           transform: none !important;
+        }
+        /* keep hidden slides (e.g. incentive/referral) out of the exported PDF */
+        .slide.slide-hidden {
+          display: none !important;
+        }
+        /* shrink the title-slide orbital for print so orbiting icons clear the text */
+        .title-hero {
+          transform: translateY(-50%) scale(0.72) !important;
+          transform-origin: center right !important;
+          right: 60px !important;
         }
         .bg-glow {
           animation: none;
@@ -4346,6 +4403,12 @@
           }, 650);
         }
 
+        // print/export view: skip the gate entirely (opened from an unlocked session).
+        if (window.location.search.indexOf("print") !== -1) {
+          unlock();
+          return;
+        }
+
         // already unlocked this session? skip the gate.
         try {
           if (sessionStorage.getItem(KEY) === "1") {
@@ -4701,6 +4764,31 @@
           </div>
         </div>
       </div>
+
+      <!-- subtle export-to-PDF button, bottom corner of the title slide -->
+      <button
+        id="exportPdf"
+        class="export-btn no-print"
+        aria-label="Export as PDF"
+        title="Export this proposal as a PDF"
+      >
+        <svg viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 3v11m0 0l-4-4m4 4l4-4"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M5 17v2a2 2 0 002 2h10a2 2 0 002-2v-2"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
+        </svg>
+        Export PDF
+      </button>
     </div>
 
     <!-- ══════════ SLIDE — AGENDA (what we'll cover) ══════════ -->
@@ -10286,6 +10374,39 @@
             show(t.getAttribute("data-scr"));
           });
         });
+      })();
+    </script>
+
+    <!-- ===== Export to PDF ===== -->
+    <script>
+      (function () {
+        var isPrint = window.location.search.indexOf("print") !== -1;
+
+        // In print mode: all slides flow visibly (deck JS bails). Auto-open the
+        // print dialog once fonts/layout settle, then close the tab afterward.
+        if (isPrint) {
+          window.addEventListener("load", function () {
+            setTimeout(function () {
+              window.print();
+            }, 900);
+          });
+          window.addEventListener("afterprint", function () {
+            window.close();
+          });
+          return;
+        }
+
+        // Normal mode: wire the subtle export button to open the print view in a new tab.
+        var btn = document.getElementById("exportPdf");
+        if (btn) {
+          btn.addEventListener("click", function () {
+            var sep = window.location.search ? "&" : "?";
+            window.open(
+              window.location.pathname + window.location.search + sep + "print",
+              "_blank",
+            );
+          });
+        }
       })();
     </script>
   </body>
